@@ -5,7 +5,6 @@ defmodule PhoenixClient.Transports.LongPoll do
 
   require Logger
 
-  #  @timeout 30_000
   @poll_timeout 25_000
 
   def open(url, transport_opts) do
