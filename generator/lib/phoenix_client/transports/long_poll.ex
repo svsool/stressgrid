@@ -45,7 +45,7 @@ defmodule PhoenixClient.Transports.LongPoll do
         ]},
         {Tesla.Middleware.Timeout, timeout: @poll_timeout}
       ],
-        {Tesla.Adapter.Finch, name: Stressgrid.Generator.Finch} # requires running Finch registry
+        {Tesla.Adapter.Finch, name: Stressgrid.Generator.PollingFinch} # requires running Finch registry
       )
 
     state = %{

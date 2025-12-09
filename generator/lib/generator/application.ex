@@ -59,7 +59,23 @@ defmodule Stressgrid.Generator.Application do
                 ]
               ]
             ]
-          }}
+          }},
+        # separate finch for long-polling to avoid mutual influence with telemetry
+        {Finch,
+          name: Stressgrid.Generator.PollingFinch,
+          pools: %{
+            :default => [
+              size: Application.get_env(:generator, :long_polling_pool_size, 40),
+              count: System.schedulers_online(),
+              conn_max_idle_time: 60_000,
+              conn_opts: [
+                transport_opts: [
+                  nodelay: true,
+                  keepalive: true
+                ]
+              ]
+            ]
+          }},
       ] ++ Application.get_env(:stressgrid, :supervisor_children, [])
 
     opts = [
