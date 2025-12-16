@@ -12,7 +12,7 @@ config :tesla, disable_deprecated_builder_warning: true
 
 import_config "#{Mix.env()}.exs"
 
-scripts_path = System.get_env("SCRIPTS_PATH") || "../scripts/config"
+scripts_path = System.get_env("SCRIPTS_PATH") || "../scripts"
 
 custom_scripts_config = Path.expand(Path.join(scripts_path, "config.exs"), __DIR__)
 

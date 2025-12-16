@@ -50,7 +50,7 @@ Stressgrid supports the following network protocols.
 
 Stressgrid consists of two components: the generator and the coordinator.
 
-The generator is a horizontally-scalable component that simulates individual devices. Each device generates the workload by exchanging network packets with the target server. For TCP/IP based protocols, each device maintains one connection to the target server. 
+The generator is a horizontally-scalable component that simulates individual devices. Each device generates the workload by exchanging network packets with the target server. For TCP/IP based protocols, each device maintains one connection to the target server.
 
 The device is also responsible for collecting metrics. There are builtin metrics for specific protocols (e.g., time to establish TCP/IP connection or HTTP responses per second) as well as custom metrics defined for a particular workload.
 
@@ -62,7 +62,7 @@ A script executes a sequence of interactions and delays that simulate the worklo
 
 The coordinator is also responsible for the aggregation of metrics and reporting through pluggable writers that can record metrics to a file or database for analysis and visualization.
 
-Currently, two writers are available: the CSV file writer and the Amazon CloudWatch writer. Coordinator records metrics at 60 seconds intervals. Each metric can be represented by a counter or by a histogram. 
+Currently, two writers are available: the CSV file writer and the Amazon CloudWatch writer. Coordinator records metrics at 60 seconds intervals. Each metric can be represented by a counter or by a histogram.
 
 Each counter produces the derivative per-second metric. A typical example of a counter metric is the number of HTTP responses with the corresponding response-per-second derivative.
 
@@ -506,7 +506,7 @@ end)
 # Perform 1,000 SET/GETs on each TCP/IP connection
 0..1_000 |> Enum.each(fn _ ->
 
-  # Key space is 2 ^ 16 = 64_536 keys  
+  # Key space is 2 ^ 16 = 64_536 keys
   key = Base.encode64(random_bits(16), padding: false)
 
   # Value size is 768 * 4 / 3 = 1024 bytes
@@ -544,7 +544,7 @@ name = "stressgrid.com"
 # Use all of 16-bit ID space
 0..0xffff |> Enum.each(fn id ->
 
-  # Encode QNAME 
+  # Encode QNAME
   qname = name
   |> String.split(".")
   |> Enum.reduce(<<>>, fn n, a ->
@@ -744,6 +744,12 @@ cd coordinator
 mix phx.server
 # or to run in IEx:
 iex -S mix phx.server
+
+# run coordinator
+iex -S mix phx.server
+
+# run generator
+iex -S mix
 ```
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
