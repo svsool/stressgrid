@@ -111,7 +111,7 @@ defmodule PhoenixClient.Transports.LongPoll do
               awaiting_batch_ack: false
             }
 
-          result ->
+          _result ->
             %{
               state
             | batch_task_ref: nil,
@@ -136,7 +136,7 @@ defmodule PhoenixClient.Transports.LongPoll do
   end
 
   # handler for Task DOWN messages
-  def handle_info({:DOWN, ref, :process, _pid, _reason}, state) do
+  def handle_info({:DOWN, _ref, :process, _pid, _reason}, state) do
     {:noreply, state}
   end
 
