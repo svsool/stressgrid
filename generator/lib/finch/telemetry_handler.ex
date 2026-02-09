@@ -128,7 +128,7 @@ defmodule Finch.TelemetryHandler do
     end
 
     # Track HTTP status codes if available
-    if Map.has_key?(metadata, :status) do
+    if Map.get(metadata, :status) != nil do
       TelemetryStore.inc_counter(:"finch_status_#{metadata.status}", 1)
 
       # Group status codes by class (2xx, 3xx, 4xx, 5xx)
