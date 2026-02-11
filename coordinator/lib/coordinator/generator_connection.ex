@@ -48,6 +48,13 @@ defmodule Stressgrid.Coordinator.GeneratorConnection do
       {:update_generators_count, %{count: count}}
     ])
   end
+  
+  # send the coordinator node information to the generator to enable generators in the live dashboard
+  def notify_coordinator_node(pid) do
+    send_terms(pid, [
+      {:coordinator_node, %{node: Node.self()}}
+    ])
+  end
 
   def init(req, _) do
     {:cowboy_websocket, req, %GeneratorConnection{}}

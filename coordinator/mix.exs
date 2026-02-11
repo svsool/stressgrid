@@ -44,7 +44,8 @@ defmodule Stressgrid.Coordinator.MixProject do
       {:ex_aws_cloudwatch, "~> 2.0"},
       {:httpoison, "~> 1.6"},
       {:dialyxir, "~> 1.4", runtime: false},
-      {:dotenv, "~> 3.1"}
+      {:dotenv, "~> 3.1"},
+      {:observer_cli, "~> 1.8"},
     ]
   end
 
