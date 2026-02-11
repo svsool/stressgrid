@@ -376,6 +376,15 @@ defmodule Stressgrid.Generator.Connection do
     connection
   end
 
+  defp receive_term(
+         connection,
+         {:coordinator_node, %{node: node}}
+       ) do
+    Node.connect(node)
+
+    connection
+  end
+
   defp send_terms(%Connection{conn_pid: conn_pid} = connection, terms) when is_list(terms) do
     :ok = :gun.ws_send(conn_pid, {:binary, :erlang.term_to_binary(terms)})
     connection

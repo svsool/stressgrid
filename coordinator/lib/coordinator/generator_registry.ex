@@ -95,6 +95,7 @@ defmodule Stressgrid.Coordinator.GeneratorRegistry do
 
     :ok = Management.notify_all(%{"generator_count" => count})
     :ok = notify_generators_count(registrations, count)
+    :ok = GeneratorConnection.notify_coordinator_node(pid)
 
     {:noreply,
      %{

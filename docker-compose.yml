@@ -8,6 +8,9 @@ services:
       - PHX_SERVER=true
       - SECRET_KEY_BASE=3sUQ4Ig0XDzXiqGlDf9kBl1MVP4AaHgtzh7l35imGb0BbKt7QkrpMQMuwWRLqcjv
       - LOGGER_LEVEL=error
+      - LIVE_DASHBOARD_AUTH_PASSWORD=stressgrid
+      - CORS_ALLOWED_ORIGINS=//localhost,//stressgrid-generator-1
+      - RELEASE_COOKIE=XdleF6H28OYylb3BFkPsYqxEGGFLzvew
     ports:
       - "4000:4000"
       - "9696:9696"
@@ -19,5 +22,6 @@ services:
       - COORDINATOR_URL=ws://coordinator:9696
       - GENERATOR_ID=generator-1
       - LOGGER_LEVEL=error
+      - RELEASE_COOKIE=XdleF6H28OYylb3BFkPsYqxEGGFLzvew
     depends_on:
       - coordinator
