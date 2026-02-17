@@ -1,6 +1,8 @@
 defmodule Stressgrid.Coordinator.Reporter do
   use GenServer
 
+  require Logger
+
   alias Stressgrid.Coordinator.{Reporter, Management, Histogram, TelemetryStore}
 
   defstruct writer_configs: [],
@@ -327,7 +329,9 @@ defmodule Stressgrid.Coordinator.Reporter do
 
             combined_hists = Map.merge(hists, coordinator_hists)
 
-            state = Kernel.apply(module, :write, [id, clock, state, combined_hists, scalars])
+            hist_stats = Stressgrid.Coordinator.HistogramStats.compute_all(combined_hists)
+
+            state = Kernel.apply(module, :write, [id, clock, state, hist_stats, scalars])
 
             maximums =
               maximums
@@ -492,6 +496,14 @@ defmodule Stressgrid.Coordinator.Reporter do
   defp script_error_to_json(%{
     error: error
   }) when is_map(error) or is_atom(error) or is_tuple(error) do
+    %{
+      "description" => inspect(error)
+    }
+  end
+
+  defp script_error_to_json(error) do
+    Logger.error("Unknown script error format: #{inspect(error)}")
+    
     %{
       "description" => inspect(error)
     }

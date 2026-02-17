@@ -21,7 +21,9 @@ config :generator,
   coordinator_url: System.get_env("COORDINATOR_URL", "ws://localhost:9696"),
   network_device: System.get_env("NETWORK_DEVICE"),
   connection_report_interval_ms:
-    String.to_integer(System.get_env("CONNECTION_REPORT_INTERVAL_MS", "1000"))
+    String.to_integer(System.get_env("CONNECTION_REPORT_INTERVAL_MS", "1000")),
+  telemetry_update_interval_ms:
+    String.to_integer(System.get_env("TELEMETRY_UPDATE_INTERVAL_MS", "1000"))
 
 scripts_path = System.get_env("SCRIPTS_PATH") || "../scripts"
 
