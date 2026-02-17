@@ -54,7 +54,7 @@ defmodule PhoenixClient.TelemetryReporter do
   end
 
   defp schedule_update do
-    Process.send_after(self(), :update_gauges, @update_interval)
+    Process.send_after(self(), :update_gauges, update_interval())
   end
   
   defp update_interval, do: Application.get_env(:generator, :telemetry_update_interval_ms, 1000)

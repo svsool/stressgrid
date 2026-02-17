@@ -4,8 +4,6 @@ defmodule Stressgrid.Coordinator.TelemetryReporter do
   alias Stressgrid.Coordinator.Scheduler
   alias Stressgrid.Coordinator.TelemetryStore
 
-  @update_interval 1000
-
   def start_link(_opts) do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
@@ -70,6 +68,6 @@ defmodule Stressgrid.Coordinator.TelemetryReporter do
   end
 
   defp schedule_update do
-    Process.send_after(self(), :update_gauges, @update_interval)
+    Process.send_after(self(), :update_gauges, Application.get_env(:coordinator, :telemetry_report_interval_ms))
   end
 end
