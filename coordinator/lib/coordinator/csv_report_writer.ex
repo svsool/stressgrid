@@ -18,37 +18,25 @@ defmodule Stressgrid.Coordinator.CsvReportWriter do
     %CsvReportWriter{}
   end
 
-  def write(_, clock, %CsvReportWriter{table: table} = writer, hists, scalars) do
+  def write(_, clock, %CsvReportWriter{table: table} = writer, hist_stats, scalars) do
     row =
-      hists
-      |> Enum.filter(fn {_, hist} ->
-        :hdr_histogram.get_total_count(hist) != 0
+      hist_stats
+      |> Enum.reject(fn {_, stats} ->
+        is_nil(stats)
       end)
-      |> Enum.map(fn {key, hist} ->
-        mean = :hdr_histogram.mean(hist)
-        min = :hdr_histogram.min(hist)
-        pc1 = :hdr_histogram.percentile(hist, 1.0)
-        pc10 = :hdr_histogram.percentile(hist, 10.0)
-        pc25 = :hdr_histogram.percentile(hist, 25.0)
-        median = :hdr_histogram.median(hist)
-        pc75 = :hdr_histogram.percentile(hist, 75.0)
-        pc90 = :hdr_histogram.percentile(hist, 90.0)
-        pc99 = :hdr_histogram.percentile(hist, 99.0)
-        max = :hdr_histogram.max(hist)
-        stddev = :hdr_histogram.stddev(hist)
-
+      |> Enum.map(fn {key, stats} ->
         [
-          {key, mean},
-          {:"#{key}_min", min},
-          {:"#{key}_pc1", pc1},
-          {:"#{key}_pc10", pc10},
-          {:"#{key}_pc25", pc25},
-          {:"#{key}_median", median},
-          {:"#{key}_pc75", pc75},
-          {:"#{key}_pc90", pc90},
-          {:"#{key}_pc99", pc99},
-          {:"#{key}_max", max},
-          {:"#{key}_stddev", stddev}
+          {key, stats.mean},
+          {:"#{key}_min", stats.min},
+          {:"#{key}_pc1", stats.p1},
+          {:"#{key}_pc10", stats.p10},
+          {:"#{key}_pc25", stats.p25},
+          {:"#{key}_median", stats.median},
+          {:"#{key}_pc75", stats.p75},
+          {:"#{key}_pc90", stats.p90},
+          {:"#{key}_pc99", stats.p99},
+          {:"#{key}_max", stats.max},
+          {:"#{key}_stddev", stats.stddev}
         ]
       end)
       |> Enum.concat()

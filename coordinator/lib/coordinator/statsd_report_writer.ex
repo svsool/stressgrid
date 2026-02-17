@@ -17,32 +17,23 @@ defmodule Stressgrid.Coordinator.StatsdReportWriter do
     writer
   end
 
-  def write(id, _clock, %StatsdReportWriter{} = writer, hists, scalars) do
+  def write(id, _clock, %StatsdReportWriter{} = writer, hist_stats, scalars) do
     tags = [run: id]
 
-    hists
-    |> Enum.each(fn {key, hist} ->
-      if :hdr_histogram.get_total_count(hist) != 0 do
-        count = :hdr_histogram.get_total_count(hist)
-        mean = :hdr_histogram.mean(hist)
-        min = :hdr_histogram.min(hist)
-        p50 = :hdr_histogram.percentile(hist, 50.0)
-        p75 = :hdr_histogram.percentile(hist, 75.0)
-        p95 = :hdr_histogram.percentile(hist, 95.0)
-        p99 = :hdr_histogram.percentile(hist, 99.0)
-        max = :hdr_histogram.max(hist)
-
+    hist_stats
+    |> Enum.each(fn {key, stats} ->
+      if not is_nil(stats) do
         metric_name = key |> normalize_metric_name()
 
-        Statsd.gauge("#{metric_name}.mean", mean, tags)
-        Statsd.gauge("#{metric_name}.min", min, tags)
-        Statsd.gauge("#{metric_name}.p50", p50, tags)
-        Statsd.gauge("#{metric_name}.p75", p75, tags)
-        Statsd.gauge("#{metric_name}.p95", p95, tags)
-        Statsd.gauge("#{metric_name}.p99", p99, tags)
-        Statsd.gauge("#{metric_name}.max", max, tags)
+        Statsd.gauge("#{metric_name}.mean", stats.mean, tags)
+        Statsd.gauge("#{metric_name}.min", stats.min, tags)
+        Statsd.gauge("#{metric_name}.p50", stats.p50, tags)
+        Statsd.gauge("#{metric_name}.p75", stats.p75, tags)
+        Statsd.gauge("#{metric_name}.p95", stats.p95, tags)
+        Statsd.gauge("#{metric_name}.p99", stats.p99, tags)
+        Statsd.gauge("#{metric_name}.max", stats.max, tags)
 
-        Statsd.counter("#{metric_name}.sample_count", count, tags)
+        Statsd.counter("#{metric_name}.sample_count", stats.count, tags)
       end
     end)
 

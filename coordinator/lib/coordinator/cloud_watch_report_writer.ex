@@ -20,18 +20,14 @@ defmodule Stressgrid.Coordinator.CloudWatchReportWriter do
 
   def write(_, _, %CloudWatchReportWriter{region: nil} = writer, _, _), do: writer
 
-  def write(id, _, %CloudWatchReportWriter{region: region} = writer, hists, scalars) do
+  def write(id, _, %CloudWatchReportWriter{region: region} = writer, hist_stats, scalars) do
     :ok =
       put_metric_data(
         region,
-        hists
-        |> Enum.reduce([], fn {key, hist}, acc ->
-          if :hdr_histogram.get_total_count(hist) != 0 do
-            count = :hdr_histogram.get_total_count(hist)
-            sum = :hdr_histogram.mean(hist) * count
-            max = :hdr_histogram.max(hist)
-            min = :hdr_histogram.min(hist)
-            [{:statistic, key, key_unit(key), count, sum, max, min, [run: id]} | acc]
+        hist_stats
+        |> Enum.reduce([], fn {key, stats}, acc ->
+          if not is_nil(stats) do
+            [{:statistic, key, key_unit(key), stats.count, stats.sum, stats.max, stats.min, [run: id]} | acc]
           else
             acc
           end
