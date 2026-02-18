@@ -19,14 +19,14 @@ defmodule Stressgrid.Coordinator.ManagementReportWriter do
     %ManagementReportWriter{}
   end
 
-  def write(_, _, %ManagementReportWriter{stats_history: stats_history} = writer, hists, scalars) do
+  def write(_, _, %ManagementReportWriter{stats_history: stats_history} = writer, hist_stats, scalars) do
     stats =
-      hists
-      |> Enum.filter(fn {_, hist} ->
-        :hdr_histogram.get_total_count(hist) != 0
+      hist_stats
+      |> Enum.reject(fn {_, stats} ->
+        is_nil(stats)
       end)
-      |> Enum.map(fn {key, hist} ->
-        {key, :hdr_histogram.mean(hist)}
+      |> Enum.map(fn {key, stats} ->
+        {key, stats.mean}
       end)
       |> Enum.concat(scalars)
       |> Map.new()

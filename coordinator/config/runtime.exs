@@ -56,7 +56,11 @@ config :coordinator,
     |> Enum.map(&String.trim/1),
   report_missing_keys: System.get_env("REPORT_MISSING_KEYS", "true") === "true",
   cooldown_ms: String.to_integer(System.get_env("COOLDOWN_MS", "10000")),
-  notify_interval_ms: String.to_integer(System.get_env("NOTIFY_INTERVAL_MS", "1000"))
+  notify_interval_ms: String.to_integer(System.get_env("NOTIFY_INTERVAL_MS", "1000")),
+  management_report_writer_interval_ms:
+    String.to_integer(System.get_env("MANAGEMENT_REPORT_WRITER_INTERVAL_MS", "1000")),
+  telemetry_report_interval_ms:
+    String.to_integer(System.get_env("TELEMETRY_REPORT_INTERVAL_MS", "1000"))
 
 if config_env() == :prod do
   # The secret key base is used to sign/encrypt cookies and other secrets.

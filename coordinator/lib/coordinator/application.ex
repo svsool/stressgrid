@@ -18,8 +18,6 @@ defmodule Stressgrid.Coordinator.Application do
     TelemetryReporter
   }
 
-  @management_report_writer_interval_ms 1_000
-
   @impl true
   def start(_type, _args) do
     TelemetryStore.init()
@@ -28,6 +26,9 @@ defmodule Stressgrid.Coordinator.Application do
 
     report_interval_ms = Application.get_env(:coordinator, :report_interval_seconds) * 1000
     report_writers = Application.get_env(:coordinator, :report_writers, [])
+
+    management_report_writer_interval_ms =
+      Application.get_env(:coordinator, :management_report_writer_interval_ms)
 
     all_writer_configs = %{
       "csv" => {CsvReportWriter, [], report_interval_ms},
@@ -39,7 +40,7 @@ defmodule Stressgrid.Coordinator.Application do
       (report_writers
        |> Enum.map(&Map.get(all_writer_configs, &1))
        |> Enum.reject(&is_nil/1)) ++
-        [{ManagementReportWriter, [], @management_report_writer_interval_ms}]
+        [{ManagementReportWriter, [], management_report_writer_interval_ms}]
 
     children = [
       Management.registry_spec(),

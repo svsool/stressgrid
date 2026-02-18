@@ -4,8 +4,6 @@ defmodule PhoenixClient.TelemetryReporter do
   alias Stressgrid.Generator.Connection
   alias Stressgrid.Generator.TelemetryStore
 
-  @update_interval 1000
-
   def start_link(_opts) do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
@@ -56,6 +54,8 @@ defmodule PhoenixClient.TelemetryReporter do
   end
 
   defp schedule_update do
-    Process.send_after(self(), :update_gauges, @update_interval)
+    Process.send_after(self(), :update_gauges, update_interval())
   end
+  
+  defp update_interval, do: Application.get_env(:generator, :telemetry_update_interval_ms, 1000)
 end
