@@ -5,7 +5,7 @@ defmodule PhoenixClient.Transports.LongPoll do
 
   require Logger
 
-  @poll_timeout 25_000
+  @poll_timeout 60_000
 
   def open(url, transport_opts) do
     GenServer.start_link(__MODULE__, [url, transport_opts])
