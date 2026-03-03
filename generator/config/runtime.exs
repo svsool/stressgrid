@@ -23,7 +23,8 @@ config :generator,
   connection_report_interval_ms:
     String.to_integer(System.get_env("CONNECTION_REPORT_INTERVAL_MS", "1000")),
   telemetry_update_interval_ms:
-    String.to_integer(System.get_env("TELEMETRY_UPDATE_INTERVAL_MS", "1000"))
+    String.to_integer(System.get_env("TELEMETRY_UPDATE_INTERVAL_MS", "1000")),
+  polling_timeout_ms: String.to_integer(System.get_env("POLLING_TIMEOUT_MS", "60000"))
 
 scripts_path = System.get_env("SCRIPTS_PATH") || "../scripts"
 
