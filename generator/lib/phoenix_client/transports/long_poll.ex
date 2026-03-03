@@ -5,8 +5,6 @@ defmodule PhoenixClient.Transports.LongPoll do
 
   require Logger
 
-  @poll_timeout 25_000
-
   def open(url, transport_opts) do
     GenServer.start_link(__MODULE__, [url, transport_opts])
   end
@@ -43,7 +41,7 @@ defmodule PhoenixClient.Transports.LongPoll do
           {"content-type", "application/x-ndjson"},
           {"accept", "application/json"}
         ]},
-        {Tesla.Middleware.Timeout, timeout: @poll_timeout}
+        {Tesla.Middleware.Timeout, timeout: Application.get_env(:generator, :transport_polling_timeout_ms)}
       ],
         {Tesla.Adapter.Finch, name: Stressgrid.Generator.Finch} # requires running Finch registry
       )
