@@ -41,7 +41,7 @@ defmodule PhoenixClient.Transports.LongPoll do
           {"content-type", "application/x-ndjson"},
           {"accept", "application/json"}
         ]},
-        {Tesla.Middleware.Timeout, timeout: Application.get_env(:generator, :polling_timeout_ms)}
+        {Tesla.Middleware.Timeout, timeout: Application.get_env(:generator, :transport_polling_timeout_ms)}
       ],
         {Tesla.Adapter.Finch, name: Stressgrid.Generator.Finch} # requires running Finch registry
       )
